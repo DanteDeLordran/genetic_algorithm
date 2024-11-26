@@ -4,6 +4,7 @@ from tkinter import filedialog
 from numpy import ndarray
 
 
+
 def csv_to_matrix() -> ndarray:
     return np.loadtxt(filedialog.askopenfilename(), delimiter=',')
 
@@ -14,6 +15,7 @@ def genetic_algorithm(matrix: ndarray) -> None:
     right_side = matrix[:,matrix.shape[1]//2:]
     q1 = []
     q2 = []
+    total = []
 
     for i in range(left_side.shape[0]):
         left = 0
@@ -41,19 +43,26 @@ def genetic_algorithm(matrix: ndarray) -> None:
                     if right_side[i,j] == right_side[i, j + 1]:
                         right -= 1
 
-        if sum(i == 1 for i in left_side) > sum(i == 0 for i in left_side):
-            left += 1
-        elif sum(i == 1 for i in left_side) < sum(i == 0 for i in left_side):
+        if np.sum(left_side[i, :] == 1) > np.sum(left_side[i, :] == 0):
+                left += 1
+        elif np.sum(left_side[i, :] == 1) < np.sum(left_side[i, :] == 0):
             left -= 1
-        if sum(i == 1 for i in right_side) > sum(i == 0 for i in right_side):
+
+        if np.sum(right_side[i, :] == 1) > np.sum(right_side[i, :] == 0):
             right += 1
-        elif sum(i == 1 for i in right_side) < sum(i == 0 for i in right_side):
+        elif np.sum(right_side[i, :] == 1) < np.sum(right_side[i, :] == 0):
             right -= 1
 
         q1.append(left)
         q2.append(right)
+
+    for i in range(len(q1)):
+        total.append(q1[i] + q2[i])
+
     print(q1)
     print(q2)
+    print(total)
+    print(np.sum(total))
 
 
 def main():
